@@ -1,4 +1,5 @@
 ﻿using TabloidCLI.UserInterfaceManagers;
+using System;
 
 namespace TabloidCLI
 {
@@ -6,6 +7,13 @@ namespace TabloidCLI
     {
         static void Main(string[] args)
         {
+
+            Console.WriteLine("Welcome To Nashville TMZ, Yeeeehaw! You look fabulous!");
+
+
+
+
+
             // MainMenuManager implements the IUserInterfaceManager interface
             IUserInterfaceManager ui = new MainMenuManager();
             while (ui != null)
