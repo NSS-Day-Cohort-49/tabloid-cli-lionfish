@@ -7,10 +7,14 @@ namespace TabloidCLI.UserInterfaceManagers
     public class BlogManager : IUserInterfaceManager
     {
         private readonly IUserInterfaceManager _parentUI;
+        private BlogRepository _blogRepository;
+        private string _connectionString;
 
         public BlogManager(IUserInterfaceManager parentUI, string connectionString)
         {
             _parentUI = parentUI;
+            _blogRepository = new BlogRepository(connectionString);
+            _connectionString = connectionString;
         }
 
         public IUserInterfaceManager Execute()
@@ -48,7 +52,7 @@ namespace TabloidCLI.UserInterfaceManagers
 
         private void List()
         {
-            List<Blog> blogs = BlogRepository.GetAll();
+            List<Blog> blogs = _blogRepository.GetAll();
             foreach (Blog blog in blogs)
             {
                 Console.WriteLine(blog);
