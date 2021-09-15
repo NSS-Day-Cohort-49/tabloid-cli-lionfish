@@ -61,7 +61,16 @@ namespace TabloidCLI.UserInterfaceManagers
 
         private void Add()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("New Blog");
+            Blog blog = new Blog();
+
+            Console.Write("Title");
+            blog.Title = Console.ReadLine();
+
+            Console.Write("Url");
+            blog.Url = Console.ReadLine();
+
+            _blogRepository.Insert(blog);
         }
 
         private void Edit()
