@@ -15,7 +15,10 @@ namespace TabloidCLI.Models
 
         public DateTime CreateDateTime { get; set; }
 
-
+        public override string ToString()
+        {
+            return $"{Title} {CreateDateTime.ToShortDateString()} {Content}.";
+        }
 
     }
 }

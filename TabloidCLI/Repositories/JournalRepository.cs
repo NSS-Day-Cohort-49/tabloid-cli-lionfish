@@ -79,7 +79,25 @@ namespace TabloidCLI
 
         public void Update(Journal journal)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"UPDATE Journal
+                                        SET Title = @title,
+                                        Content = @content,
+                                        CreateDateTime = @createDateTime
+                                        WHERE Id = @id";
+                    cmd.Parameters.AddWithValue("@title", journal.Title);
+                    cmd.Parameters.AddWithValue("@content", journal.Content);
+                    cmd.Parameters.AddWithValue("@createDateTime", journal.CreateDateTime);
+                    cmd.Parameters.AddWithValue("@id", journal.Id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
 
 
         }
@@ -87,7 +105,17 @@ namespace TabloidCLI
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM Journal WHERE Id = @Id";
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
 
