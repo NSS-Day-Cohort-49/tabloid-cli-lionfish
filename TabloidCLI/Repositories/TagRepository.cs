@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using TabloidCLI.Models;
-using TabloidCLI.Repositories;
 using TabloidCLI.UserInterfaceManagers;
 
-namespace TabloidCLI
+namespace TabloidCLI.Repositories
 {
     public class TagRepository : DatabaseConnector, IRepository<Tag>
     {
@@ -32,18 +31,50 @@ namespace TabloidCLI
                         tags.Add(tag);
                     }
 
-                    reader.Close();
-
                     return tags;
                 }
             }
         }
 
+        //private Tag Choose(string prompt = null)
+        //{
+        //    throw new NotImplementedException();
+        //}
+
         public Tag Get(int id)
         {
-            throw new NotImplementedException();
-        }
 
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"SELECT t.Id AS TagID,
+                                              t.Name
+                                         FROM Tag t";
+
+                    cmd.Parameters.AddWithValue("@id", id);
+
+
+                    Tag tag = null;
+
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    while (reader.Read())
+                    {
+                        if (tag == null)
+                        {
+                            tag = new Tag()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("TagId")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                            };
+                        }
+                    }
+                    return tag;
+                }
+
+            }
+        }
         public void Insert(Tag tag)
         {
             throw new NotImplementedException();
@@ -66,8 +97,7 @@ namespace TabloidCLI
                 conn.Open();
                 using (SqlCommand cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = @"SELECT a.id,
-                                               a.FirstName,
+                    cmd.CommandText = @"SELECT a.id,                                               a.FirstName,
                                                a.LastName,
                                                a.Bio
                                           FROM Author a
@@ -89,9 +119,6 @@ namespace TabloidCLI
                         };
                         results.Add(author);
                     }
-
-                    reader.Close();
-
                     return results;
                 }
             }
