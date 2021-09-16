@@ -107,6 +107,11 @@ namespace TabloidCLI.Repositories
             }
         }
 
+        internal List<Post> GetByBlog(int blogId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Insert(Post post)
         {
             using (SqlConnection conn = Connection)

@@ -93,6 +93,11 @@ namespace TabloidCLI
             }
         }
 
+        internal void InsertTag(Blog blog, Tag tag)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Insert(Blog blog)
         {
             using (SqlConnection conn = Connection)
@@ -108,6 +113,11 @@ namespace TabloidCLI
                     cmd.ExecuteNonQuery();
                 }
             }
+        }
+
+        internal void DeleteTag(int id1, int id2)
+        {
+            throw new NotImplementedException();
         }
 
         public void Update(Blog blog)
