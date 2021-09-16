@@ -78,7 +78,7 @@ namespace TabloidCLI.UserInterfaceManagers
 
             List<Tag> tags = _tagRepository.GetAll();
 
-            for (int i = 0; i < tags.Count; i++)
+            for (int i = 0; i < tags.Count; i++) 
                 {
                 Tag tag = tags[i];
                 Console.WriteLine($"{i + 1} {tag.Name}");
