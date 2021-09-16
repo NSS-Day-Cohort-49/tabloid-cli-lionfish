@@ -66,9 +66,61 @@ namespace TabloidCLI.UserInterfaceManagers
             throw new NotImplementedException();
         }
 
+
+        private Tag Select(string prompt = null)
+        {
+            if (prompt == null)
+            {
+                prompt = "Choose a tag please.";
+            }
+
+            Console.WriteLine(prompt);
+
+            List<Tag> tags = _tagRepository.GetAll();
+
+            for (int i = 0; i < tags.Count; i++) 
+                {
+                Tag tag = tags[i];
+                Console.WriteLine($"{i + 1} {tag.Name}");
+
+                }
+            Console.Write("> ");
+
+            string userInput = Console.ReadLine();
+            try
+            {
+                int selection = int.Parse(userInput);
+                return tags[selection - 1];
+            }
+            catch (Exception)
+            {
+                Console.WriteLine("Not a valid selection!");
+                return null;
+            }
+
+        }
+
+
         private void Edit()
         {
-            throw new NotImplementedException();
+            Tag tagToEdit = Select("Which tag do you want to edit?");
+            if (tagToEdit == null)
+            {
+                return;
+            }
+
+            Console.WriteLine();
+            Console.Write("Enter new tag name: ");
+            string tagName = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(tagName))
+            {
+                tagToEdit.Name = tagName;
+            }
+
+            _tagRepository.Update(tagToEdit);
+            Console.WriteLine();
+            Console.WriteLine($"Tag has been updated to {tagToEdit.Name}");
+            Console.WriteLine();
         }
 
         private void Remove()
