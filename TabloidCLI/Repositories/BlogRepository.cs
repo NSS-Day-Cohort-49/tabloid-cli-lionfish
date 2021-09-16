@@ -93,6 +93,11 @@ namespace TabloidCLI
             }
         }
 
+        internal void InsertTag(Blog blog, Tag tag)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Insert(Blog blog)
         {
             using (SqlConnection conn = Connection)
