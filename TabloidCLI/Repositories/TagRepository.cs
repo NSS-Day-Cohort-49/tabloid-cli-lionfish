@@ -77,7 +77,19 @@ namespace TabloidCLI.Repositories
         }
         public void Insert(Tag tag)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = Connection)
+            {
+                conn.Open();
+
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"INSERT INTO Tag (Name)
+                                        VALUES (@name)";
+                    cmd.Parameters.AddWithValue(@"name", tag.Name);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
 
 
@@ -107,8 +119,21 @@ namespace TabloidCLI.Repositories
 
         public void Delete(int id)
         {
-            throw new NotImplementedException();
+            using (SqlConnection conn = Connection)
+            {
+                using (SqlCommand cmd = conn.CreateCommand())
+                {
+                    cmd.CommandText = @"DELETE FROM Tag WHERE id = @id";
+                    cmd.Parameters.AddWithValue("@id", id);
+
+                    cmd.ExecuteNonQuery();
+                }
+            }
         }
+
+
+
+
 
         public SearchResults<Author> SearchAuthors(string tagName)
         {
