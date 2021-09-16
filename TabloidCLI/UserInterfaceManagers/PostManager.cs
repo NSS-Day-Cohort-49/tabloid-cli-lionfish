@@ -9,12 +9,14 @@ namespace TabloidCLI.UserInterfaceManagers
     {
         private readonly IUserInterfaceManager _parentUI;
         private PostRepository _postRepository;
+        private AuthorRepository _authorRepository;
         private string _connectionString;
 
         public PostManager(IUserInterfaceManager parentUI, string connectionString)
         {
             _parentUI = parentUI;
             _postRepository = new PostRepository(connectionString);
+            _authorRepository = new AuthorRepository(connectionString);
             _connectionString = connectionString;
         }
 
@@ -62,7 +64,34 @@ namespace TabloidCLI.UserInterfaceManagers
 
         private void Add()
         {
-            throw new NotImplementedException();
+            Console.WriteLine("New Post");
+            Post post = new Post();
+
+            Console.WriteLine("Title: ");
+            post.Title = Console.ReadLine();
+
+            Console.WriteLine("Url: ");
+            post.Url = Console.ReadLine();
+
+            Console.WriteLine("Date:(DD/MM/YYYY)");
+            DateTime publishDate = DateTime.Parse(Console.ReadLine());
+            post.PublishDateTime = publishDate;
+
+            Console.Write("Author:");
+            ListAuthors();
+
+            int selectedAuthor = int.Parse(Console.ReadLine());
+            post.Author = _authorRepository.Get(selectedAuthor);
+
+        }
+
+        private void ListAuthors()
+        {
+            List<Author> authors = _authorRepository.GetAll();
+            foreach (Author author in authors)
+            {
+                Console.WriteLine($"{author.Id} {author}");
+            }
         }
 
         private void Edit()
