@@ -11,11 +11,20 @@ namespace TabloidCLI.UserInterfaceManagers
         private BlogRepository _blogRepository;
         private PostRepository _postRepository;
         private TagRepository _tagRepository;
-        private int _authorId;
+        private int _blogId;
 
-        public BlogDetailManager(IUserInterfaceManager) parentUI, string connectionString, int blogId) 
-            {
-                
-            }
+        public BlogDetailManager(IUserInterfaceManager parentUI, string connectionString, int blogId)
+        {
+            _parentUI = parentUI;
+            _blogRepository = new BlogRepository(connectionString);
+            _postRepository = new PostRepository(connectionString);
+            _tagRepository = new TagRepository(connectionString);
+            _blogId = blogId;
+        }
+
+        public IUserInterfaceManager Execute()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
