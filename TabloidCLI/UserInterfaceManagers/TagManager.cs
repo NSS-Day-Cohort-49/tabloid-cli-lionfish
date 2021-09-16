@@ -125,7 +125,14 @@ namespace TabloidCLI.UserInterfaceManagers
 
         private void Remove()
         {
-            throw new NotImplementedException();
+            Tag tagToDelete = Select("Which tag do you want to remove?");
+            if (tagToDelete != null)
+            {
+                _tagRepository.Delete(tagToDelete.Id);
+                Console.WriteLine();
+                Console.WriteLine($"{tagToDelete.Name} has been removed.");
+                Console.WriteLine();
+            }
         }
     }
 }
