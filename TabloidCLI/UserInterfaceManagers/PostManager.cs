@@ -10,6 +10,7 @@ namespace TabloidCLI.UserInterfaceManagers
         private readonly IUserInterfaceManager _parentUI;
         private PostRepository _postRepository;
         private AuthorRepository _authorRepository;
+        private BlogRepository _blogRepository;
         private string _connectionString;
 
         public PostManager(IUserInterfaceManager parentUI, string connectionString)
@@ -17,6 +18,7 @@ namespace TabloidCLI.UserInterfaceManagers
             _parentUI = parentUI;
             _postRepository = new PostRepository(connectionString);
             _authorRepository = new AuthorRepository(connectionString);
+            _blogRepository = new BlogRepository(connectionString);
             _connectionString = connectionString;
         }
 
@@ -83,6 +85,12 @@ namespace TabloidCLI.UserInterfaceManagers
             int selectedAuthor = int.Parse(Console.ReadLine());
             post.Author = _authorRepository.Get(selectedAuthor);
 
+            Console.Write("Blog:");
+            ListBlogs();
+
+            int selectedBlog = int.Parse(Console.ReadLine());
+            post.Blog = _blogRepository.Get(selectedBlog);
+
         }
 
         private void ListAuthors()
@@ -94,9 +102,104 @@ namespace TabloidCLI.UserInterfaceManagers
             }
         }
 
+        private void ListBlogs()
+        {
+            List<Blog> blogs = _blogRepository.GetAll();
+            foreach (Blog blog in blogs)
+            {
+                Console.WriteLine($"{blog.Id} {blog}");
+            }
+        }
+        private Post Choose(string prompt = null)
+        {
+            if (prompt == null)
+            {
+                prompt = "Please choose an Post:";
+            }
+
+            Console.WriteLine(prompt);
+
+            List<Post> posts = _postRepository.GetAll();
+
+            for (int i = 0; i < posts.Count; i++)
+            {
+                Post post = posts[i];
+                Console.WriteLine($" {i + 1}) {post.Title}");
+            }
+            Console.Write("> ");
+
+            string input = Console.ReadLine();
+            try
+            {
+                int choice = int.Parse(input);
+                return posts[choice - 1];
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Invalid Selection");
+                return null;
+            }
+        }
+
         private void Edit()
         {
-            throw new NotImplementedException();
+            Post postToEdit = Choose("Which post would you like to edit?");
+            if (postToEdit == null)
+            {
+                return;
+            }
+
+            Console.WriteLine();
+            Console.Write("New title(blank to leave unchanged): ");
+            string title = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(title))
+            {
+                postToEdit.Title = title;
+            }
+
+            Console.Write("New Url (blank to leave unchanged): ");
+            string url = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(url))
+            {
+                postToEdit.Url = url;
+            }
+
+            Console.Write("New Publication Date (DD/MM/YYYY) (blank to leave unchanged): ");
+            var date = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(date))
+            {
+                postToEdit.PublishDateTime = DateTime.Parse(date);
+            }
+
+            Console.WriteLine("Update Author: ");
+            List<Author> authors = _authorRepository.GetAll();
+            for (int i = 0; i < authors.Count; i++)
+            {
+                Author updateAuthor = authors[i];
+                Console.WriteLine($" {i + 1}) {updateAuthor.FullName}");
+            }
+            Console.Write("> ");
+            var authorIndex = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(authorIndex))
+            {
+                postToEdit.Author = authors[int.Parse(authorIndex) - 1];
+            }
+
+            Console.WriteLine("Update Blog: ");
+            List<Blog> blogs = _blogRepository.GetAll();
+            for (int i = 0; i < blogs.Count; i++)
+            {
+                Blog updateBlog = blogs[i];
+                Console.WriteLine($" {i + 1}) {updateBlog.ToString()}");
+            }
+            Console.Write("> ");
+            var blogIndex = Console.ReadLine();
+            if (!string.IsNullOrWhiteSpace(blogIndex))
+            {
+                postToEdit.Blog = blogs[int.Parse(blogIndex) - 1];
+            }
+
+            _postRepository.Update(postToEdit);
         }
 
         private void Remove()
