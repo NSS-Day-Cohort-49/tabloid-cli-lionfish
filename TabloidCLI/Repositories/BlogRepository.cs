@@ -115,6 +115,11 @@ namespace TabloidCLI
             }
         }
 
+        internal void DeleteTag(int id1, int id2)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(Blog blog)
         {
             using (SqlConnection conn = Connection)
