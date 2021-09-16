@@ -148,10 +148,12 @@ namespace TabloidCLI.Repositories
                     cmd.Parameters.AddWithValue("@blogId", post.Blog.Id);
                     cmd.Parameters.AddWithValue("@id", post.Id);
 
+
                     cmd.ExecuteNonQuery();
                 }
             }
         }
+
 
         public void Delete(int id)
         {
